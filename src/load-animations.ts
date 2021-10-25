@@ -33,7 +33,8 @@ startChosenAnimation();
 export function startChosenAnimation(): void 
 {
     //animationHandle = window.requestAnimationFrame(simpleRotator);
-    animationHandle = window.requestAnimationFrame(simpleFader);
+    //animationHandle = window.requestAnimationFrame(simpleFader);
+    animationHandle = window.requestAnimationFrame(simpleScaler);
 }
 
 export function simpleRotator(timestamp: DOMHighResTimeStamp): void
@@ -60,6 +61,18 @@ export function simpleFader(timestamp: DOMHighResTimeStamp): void
     ctx.fillStyle = `rgba(255, 255, 255, ${alpha})`;
     ctx.fill();
     animationHandle = window.requestAnimationFrame(simpleFader);
+}
+
+export function simpleScaler(timestamp: DOMHighResTimeStamp): void
+{
+    ctx.fillStyle = 'black';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.beginPath();
+    const scale: number = Math.abs(Math.cos(timestamp * 0.001));
+    ctx.arc(200, 200, 20 + 80 * scale, 0, 2 * Math.PI);
+    ctx.fillStyle = `rgba(255, 255, 255, 255)`;
+    ctx.fill();
+    animationHandle = window.requestAnimationFrame(simpleScaler);
 }
 
 export function fillBuildInfo(elementName: string, day: string, shortHash: string): void 
