@@ -34,7 +34,8 @@ export function startChosenAnimation(): void
 {
     //animationHandle = window.requestAnimationFrame(simpleRotator);
     //animationHandle = window.requestAnimationFrame(simpleFader);
-    animationHandle = window.requestAnimationFrame(simpleScaler);
+    //animationHandle = window.requestAnimationFrame(simpleScaler);
+    animationHandle = window.requestAnimationFrame(simpleWave);
 }
 
 export function simpleRotator(timestamp: DOMHighResTimeStamp): void
@@ -73,6 +74,53 @@ export function simpleScaler(timestamp: DOMHighResTimeStamp): void
     ctx.fillStyle = `rgba(255, 255, 255, 255)`;
     ctx.fill();
     animationHandle = window.requestAnimationFrame(simpleScaler);
+}
+
+export function simpleWave(timestamp: DOMHighResTimeStamp): void
+{
+    ctx.fillStyle = 'black';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    let timeOffset: number = timestamp + 0.01;
+    let yDelta: number = Math.cos(timeOffset * 0.003);
+    ctx.beginPath();
+    ctx.arc(40, 200 + yDelta * 40, 20, 0, 2 * Math.PI);
+    ctx.closePath();
+    ctx.fillStyle = `rgba(255, 255, 255, 255)`;
+    ctx.fill();
+
+    timeOffset = timeOffset + 200;
+    yDelta = Math.cos(timeOffset * 0.003);
+    ctx.beginPath();
+    ctx.arc(120, 200 + yDelta * 40, 20, 0, 2 * Math.PI);
+    ctx.closePath();
+    ctx.fillStyle = `rgba(255, 255, 255, 255)`;
+    ctx.fill();
+
+    timeOffset = timeOffset + 200;
+    yDelta = Math.cos(timeOffset * 0.003);
+    ctx.beginPath();
+    ctx.arc(200, 200 + yDelta * 40, 20, 0, 2 * Math.PI);
+    ctx.closePath();
+    ctx.fillStyle = `rgba(255, 255, 255, 255)`;
+    ctx.fill();
+
+    timeOffset = timeOffset + 200;
+    yDelta = Math.cos(timeOffset * 0.003);
+    ctx.beginPath();
+    ctx.arc(280, 200 + yDelta * 40, 20, 0, 2 * Math.PI);
+    ctx.closePath();
+    ctx.fillStyle = `rgba(255, 255, 255, 255)`;
+    ctx.fill();
+
+    timeOffset = timeOffset + 200;
+    yDelta = Math.cos(timeOffset * 0.003);
+    ctx.beginPath();
+    ctx.arc(360, 200 + yDelta * 40, 20, 0, 2 * Math.PI);
+    ctx.closePath();
+    ctx.fillStyle = `rgba(255, 255, 255, 255)`;
+    ctx.fill();
+    animationHandle = window.requestAnimationFrame(simpleWave);
 }
 
 export function fillBuildInfo(elementName: string, day: string, shortHash: string): void 
