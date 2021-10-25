@@ -32,7 +32,8 @@ startChosenAnimation();
 
 export function startChosenAnimation(): void 
 {
-    animationHandle = window.requestAnimationFrame(simpleRotator)
+    //animationHandle = window.requestAnimationFrame(simpleRotator);
+    animationHandle = window.requestAnimationFrame(simpleFader);
 }
 
 export function simpleRotator(timestamp: DOMHighResTimeStamp): void
@@ -46,7 +47,19 @@ export function simpleRotator(timestamp: DOMHighResTimeStamp): void
     ctx.font = "30px Arial";
     ctx.fillText("⏳", 200, 200);
     ctx.setTransform(1, 0, 0, 1, 0, 0);
-    animationHandle = window.requestAnimationFrame(simpleRotator)
+    animationHandle = window.requestAnimationFrame(simpleRotator);
+}
+
+export function simpleFader(timestamp: DOMHighResTimeStamp): void
+{
+    ctx.fillStyle = 'black';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.beginPath();
+    ctx.arc(200, 200, 50, 0, 2 * Math.PI);
+    const alpha: number = Math.abs(Math.cos(timestamp * 0.001));
+    ctx.fillStyle = `rgba(255, 255, 255, ${alpha})`;
+    ctx.fill();
+    animationHandle = window.requestAnimationFrame(simpleFader);
 }
 
 export function fillBuildInfo(elementName: string, day: string, shortHash: string): void 
