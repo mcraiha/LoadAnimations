@@ -149,5 +149,5 @@ export function simpleWave(timestamp: DOMHighResTimeStamp): void
 export function fillBuildInfo(elementName: string, day: string, shortHash: string): void 
 {
     const buildInfoElement: HTMLElement = document.getElementById(elementName)!;
-    buildInfoElement.innerHTML = `<time datetime="${day}">${day}</time> <a href="https://github.com/mcraiha/JS-Crop-And-Resize/commit/${shortHash}">#${shortHash}</a>`;
+    buildInfoElement.innerHTML = `<time datetime="${day}">${day}</time> <a href="https://github.com/mcraiha/LoadAnimations/commit/${shortHash}">#${shortHash}</a>`;
 }
