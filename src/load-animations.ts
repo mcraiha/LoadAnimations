@@ -9,6 +9,7 @@ const effectDefinitions: ReadonlyArray<[string,  (timestamp: DOMHighResTimeStamp
     ["Simple fader", simpleFader],
     ["Simple scaler", simpleScaler],
     ["Simple wave", simpleWave],
+    ["Simple path follow", simplePathFollow],
 );
 
 let doStop: boolean = true;
@@ -171,6 +172,40 @@ export function simpleWave(timestamp: DOMHighResTimeStamp): void
     ctx.fillStyle = `rgba(255, 255, 255, 255)`;
     ctx.fill();
     animationHandle = window.requestAnimationFrame(simpleWave);
+}
+
+export function simplePathFollow(timestamp: DOMHighResTimeStamp): void
+{
+    ctx.fillStyle = 'black';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.beginPath();
+    const remainder: number = (timestamp / 1000) % 4;
+
+    const cornerSafezone: number = 20;
+    const ballRadius: number = 15;
+    const maxWidthMovement: number = canvas.width - cornerSafezone - cornerSafezone;
+    const maxHeightMovement: number = canvas.height - cornerSafezone - cornerSafezone;
+    //console.log(remainder);
+    if (remainder < 1.0)
+    {
+        ctx.arc(cornerSafezone, maxHeightMovement - (maxHeightMovement * remainder) + cornerSafezone, ballRadius, 0, 2 * Math.PI);
+    }
+    else if (1.0 <= remainder && remainder < 2.0)
+    {
+        ctx.arc(cornerSafezone + maxWidthMovement * (remainder - 1), cornerSafezone, ballRadius, 0, 2 * Math.PI);
+    }
+    else if (2.0 <= remainder && remainder < 3.0)
+    {
+        ctx.arc(canvas.width - cornerSafezone, cornerSafezone + maxHeightMovement * (remainder - 2), ballRadius, 0, 2 * Math.PI);
+    }
+    else if (3.0 <= remainder && remainder < 4.0)
+    {
+        ctx.arc(canvas.width - cornerSafezone - maxWidthMovement * (remainder - 3), canvas.height - cornerSafezone, ballRadius, 0, 2 * Math.PI);
+    }
+    
+    ctx.fillStyle = `rgba(255, 255, 255, 255)`;
+    ctx.fill();
+    animationHandle = window.requestAnimationFrame(simplePathFollow);
 }
 
 export function fillBuildInfo(elementName: string, day: string, shortHash: string): void 
