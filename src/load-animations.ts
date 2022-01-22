@@ -20,7 +20,7 @@ if (selectDropdown)
 {
     selectDropdown.addEventListener('change', (event) => {
         const selectTarget: HTMLSelectElement = event.target as HTMLSelectElement;
-        startChosenAnimation(Number(selectTarget.value));
+        startChosenAnimation(Number(selectTarget.value), true);
       });
 }
 
@@ -43,32 +43,49 @@ if (startStopButton)
         if (doStop)
         {
             window.cancelAnimationFrame(animationHandle);
-            startStopButtonActualInput.innerHTML = "Start";
-            doStop = false;
         }
         else
         {
-            startChosenAnimation(currentAnimationIndex);
-            startStopButtonActualInput.innerHTML = "Stop";
-            doStop = true;
+            startChosenAnimation(currentAnimationIndex, false);
         }
+        changeButtonState(doStop);
       });
 }
 
 fillBuildInfo('buildInfo', buildDate, gitShortHash);
 
-startChosenAnimation(0);
+startChosenAnimation(0, true);
 
-export function startChosenAnimation(selected: number): void 
+export function startChosenAnimation(selected: number, startFromFresh: boolean): void 
 {
     // Stop current animation if it happening
     if (animationHandle > -1)
     {
         window.cancelAnimationFrame(animationHandle);
     }
-    
+
     currentAnimationIndex = selected;
     animationHandle = window.requestAnimationFrame(effectDefinitions[selected][1]);
+
+    if (startFromFresh)
+    {
+        changeButtonState(false);
+    }
+}
+
+export function changeButtonState(showStop: boolean): void
+{
+    const startStopButtonActualInput: HTMLInputElement = <HTMLInputElement>startStopButton;
+    if (showStop)
+    {
+        startStopButtonActualInput.innerHTML = "Start";
+        doStop = false;
+    }
+    else
+    {
+        startStopButtonActualInput.innerHTML = "Stop";
+        doStop = true;
+    }
 }
 
 export function simpleRotator(timestamp: DOMHighResTimeStamp): void
