@@ -3,8 +3,34 @@ const typescriptVersion: string = "{0}";
 const gitShortHash: string = "{1}";
 const buildDate: string = "{2}";
 
+
+const effectDefinitions: ReadonlyArray<[string,  (timestamp: DOMHighResTimeStamp) => void]> = new Array<[string,  (timestamp: DOMHighResTimeStamp) => void]>(
+    ["Simple rotator", simpleRotator],
+    ["Simple fader", simpleFader],
+    ["Simple scaler", simpleScaler],
+    ["Simple wave", simpleWave],
+);
+
 let doStop: boolean = true;
 let animationHandle: number = -1;
+let animatorMethod: (timestamp: DOMHighResTimeStamp) => void = function (x) {};
+
+const selectDropdown = document.getElementById('chosenanimation')!;
+if (selectDropdown)
+{
+    selectDropdown.addEventListener('change', (event) => {
+        const selectTarget: HTMLSelectElement = event.target as HTMLSelectElement;
+        startChosenAnimation(Number(selectTarget.value));
+      });
+}
+
+for (let i = 0; i < effectDefinitions.length; i++) 
+{
+    const opt: HTMLOptionElement = document.createElement('option');
+    opt.value = i.toString();
+    opt.innerHTML = effectDefinitions[i][0];
+    selectDropdown.appendChild(opt);
+}
 
 const canvas: HTMLCanvasElement = <HTMLCanvasElement>document.getElementById('canvas')!;
 const ctx: CanvasRenderingContext2D = canvas.getContext('2d')!;
@@ -28,14 +54,11 @@ if (startStopButton)
 
 fillBuildInfo('buildInfo', buildDate, gitShortHash);
 
-startChosenAnimation();
+startChosenAnimation(0);
 
-export function startChosenAnimation(): void 
+export function startChosenAnimation(selected: number): void 
 {
-    //animationHandle = window.requestAnimationFrame(simpleRotator);
-    //animationHandle = window.requestAnimationFrame(simpleFader);
-    //animationHandle = window.requestAnimationFrame(simpleScaler);
-    animationHandle = window.requestAnimationFrame(simpleWave);
+    animationHandle = window.requestAnimationFrame(effectDefinitions[selected][1]);
 }
 
 export function simpleRotator(timestamp: DOMHighResTimeStamp): void
