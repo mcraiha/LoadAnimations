@@ -13,7 +13,7 @@ const effectDefinitions: ReadonlyArray<[string,  (timestamp: DOMHighResTimeStamp
 
 let doStop: boolean = true;
 let animationHandle: number = -1;
-let animatorMethod: (timestamp: DOMHighResTimeStamp) => void = function (x) {};
+let currentAnimationIndex: number = -1;
 
 const selectDropdown = document.getElementById('chosenanimation')!;
 if (selectDropdown)
@@ -43,10 +43,13 @@ if (startStopButton)
         if (doStop)
         {
             window.cancelAnimationFrame(animationHandle);
+            startStopButtonActualInput.innerHTML = "Start";
             doStop = false;
         }
         else
         {
+            startChosenAnimation(currentAnimationIndex);
+            startStopButtonActualInput.innerHTML = "Stop";
             doStop = true;
         }
       });
@@ -58,6 +61,13 @@ startChosenAnimation(0);
 
 export function startChosenAnimation(selected: number): void 
 {
+    // Stop current animation if it happening
+    if (animationHandle > -1)
+    {
+        window.cancelAnimationFrame(animationHandle);
+    }
+    
+    currentAnimationIndex = selected;
     animationHandle = window.requestAnimationFrame(effectDefinitions[selected][1]);
 }
 
